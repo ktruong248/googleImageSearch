@@ -1,8 +1,6 @@
-package com.ktruong.googleimagesearcher;
+package com.ktruong.googleimagesearcher.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,19 +9,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.etsy.android.grid.StaggeredGridView;
+import com.ktruong.googleimagesearcher.client.GooglePhotoSearch;
+import com.ktruong.googleimagesearcher.client.SearchQuery;
+import com.ktruong.googleimagesearcher.converter.PhotoConverter;
+import com.ktruong.googleimagesearcher.adapter.PhotoSearchAdapter;
+import com.ktruong.googleimagesearcher.R;
 import com.ktruong.googleimagesearcher.listener.EndlessScrollListener;
+import com.ktruong.googleimagesearcher.models.Photo;
+import com.ktruong.googleimagesearcher.models.User;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,7 +42,7 @@ public class RequestActivity extends ActionBarActivity  {
     private PhotoSearchAdapter photoSearchAdapter;
     private SearchView searchView;
     private String searchQuery;
-    
+    private GooglePhotoSearch googlePhotoSearch;
 
     /**
      *      * never create object outside of onCreate
@@ -53,6 +54,8 @@ public class RequestActivity extends ActionBarActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
 
+        googlePhotoSearch = new GooglePhotoSearch();
+        
         photos = new ArrayList<>();
 
         photoSearchAdapter = new PhotoSearchAdapter(this, photos);
@@ -106,18 +109,6 @@ public class RequestActivity extends ActionBarActivity  {
         user = new User();
     }
 
-//    @Override
-//    public boolean onQueryTextSubmit(String s) {
-//        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onQueryTextChange(String s) {
-//        Log.i("INFO", "text change " + s);
-//        return false;
-//    }
-
     /**
      * @param menu
      * @return
@@ -125,7 +116,6 @@ public class RequestActivity extends ActionBarActivity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_request, menu);
         getMenuInflater().inflate(R.menu.search_request, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -137,52 +127,14 @@ public class RequestActivity extends ActionBarActivity  {
                 photos.clear();
                 searchQuery = query;
                 Log.i("INFO", "search query " + query);
-
-                String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + query + "&rsz=8";
-                
-                AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                asyncHttpClient.get(searchUrl, new JsonHttpResponseHandler(){
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        Log.i("INFO", "result " + response.toString());
-                        try {
-                            JSONObject responseData = response.getJSONObject("responseData");
-
-                            List<Photo> results = PhotoConverter.fromJson(responseData.getJSONArray("results"));
-//                            photos.addAll(results);
-                            photoSearchAdapter.addAll(results); // add and notify
-//                            photoSearchAdapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        Log.i("INFO", photos.toString());
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                        for (int i = 0; i < 5; i++) {
-//                            InstagramPhoto instagramPhoto = new InstagramPhoto();
-//                            instagramPhoto.setCaptionFromUserName("caption-user" + i);
-//                            instagramPhoto.setCaption("some long caption text " + i);
-//                            instagramPhoto.setUserFullName("my long name " + i);
-//                            instagramPhoto.setName("user" + i);
-//
-//
-//                            photos.add(instagramPhoto);
-//                        }
-//                        instagramPhotoAdapter.notifyDataSetChanged();
-                    }
-                });
-                // do some search and send back data to the list view ?
-                photoSearchAdapter.notifyDataSetChanged();
-
+                googlePhotoSearch.search(new SearchQuery(query,0), photoSearchAdapter);
 
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i("INFO", "text change " + newText);
+//                Log.i("INFO", "text change " + newText);
                 return false;
             }
         });
@@ -246,43 +198,6 @@ public class RequestActivity extends ActionBarActivity  {
         // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
         // Deserialize API response and then construct new objects to append to the adapter
         Log.i("INFO", "offset " + offset);
-
-        String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + query + "&rsz=8&start="+offset;
-
-        Log.i("INFO", "search url " + searchUrl);
-
-        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-        asyncHttpClient.get(searchUrl, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.i("INFO", "result " + response.toString());
-                try {
-                    JSONObject responseData = response.getJSONObject("responseData");
-
-                    List<Photo> results = PhotoConverter.fromJson(responseData.getJSONArray("results"));
-//                            photos.addAll(results);
-                    photoSearchAdapter.addAll(results); // add and notify
-//                            photoSearchAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.i("INFO", photos.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                        for (int i = 0; i < 5; i++) {
-//                            InstagramPhoto instagramPhoto = new InstagramPhoto();
-//                            instagramPhoto.setCaptionFromUserName("caption-user" + i);
-//                            instagramPhoto.setCaption("some long caption text " + i);
-//                            instagramPhoto.setUserFullName("my long name " + i);
-//                            instagramPhoto.setName("user" + i);
-//
-//
-//                            photos.add(instagramPhoto);
-//                        }
-//                        instagramPhotoAdapter.notifyDataSetChanged();
-            }
-        });
+        googlePhotoSearch.search(new SearchQuery(query, offset), photoSearchAdapter);
     }
 }

@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".RequestActivity"
+            android:name=".activities.RequestActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,14 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FormActivity"
+            android:name=".activities.FormActivity"
             android:label="@string/title_activity_form_activityy" >
         </activity>
         <activity
-            android:parentActivityName=".RequestActivity"
-            android:name=".FullScreenActivity"
+            android:parentActivityName=".activities.RequestActivity"
+            android:name=".activities.FullScreenActivity"
             android:label="@string/title_activity_full_screen" >
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.ktruong.googleimagesearcher.FullScreenActivity"></meta-data>
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".activities.FullScreenActivity"></meta-data>
         </activity>
     </application>
 

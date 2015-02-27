@@ -1,4 +1,4 @@
-package com.ktruong.googleimagesearcher;
+package com.ktruong.googleimagesearcher.models;
 
 import android.net.Uri;
 

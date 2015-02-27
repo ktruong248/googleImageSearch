@@ -1,16 +1,14 @@
-package com.ktruong.googleimagesearcher;
+package com.ktruong.googleimagesearcher.converter;
+
+import com.ktruong.googleimagesearcher.models.Photo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by ktruong on 2/26/15.
- */
 public class PhotoConverter {
     public static List<Photo> fromJson(JSONArray results) {
         List<Photo> photos = new ArrayList<>();

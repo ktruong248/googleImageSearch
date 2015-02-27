@@ -1,4 +1,4 @@
-package com.ktruong.googleimagesearcher;
+package com.ktruong.googleimagesearcher.adapter;
 
 import android.content.Context;
 import android.text.Html;
@@ -7,10 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ktruong.googleimagesearcher.R;
+import com.ktruong.googleimagesearcher.models.Photo;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -33,8 +34,6 @@ public class PhotoSearchAdapter extends ArrayAdapter<Photo> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
 
-        Log.i("INFO", "get view " + position);
-        
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo_grid, parent, false);
@@ -52,9 +51,7 @@ public class PhotoSearchAdapter extends ArrayAdapter<Photo> {
         viewHolder.imageTitle.setText(Html.fromHtml(photo.getTitle()));
         viewHolder.imageView.setImageResource(0);
         
-        String imageUrl = photo.getImageUrl();
-        Log.i("INFO", "imageUrl " + imageUrl);
-//        Picasso.with(getContext()).load(imageUrl).fit().centerCrop().placeholder(R.mipmap.ic_launcher).into(viewHolder.imageView);
+        String imageUrl = photo.getThumbUrl();
         Picasso.with(getContext()).load(imageUrl).fit().placeholder(R.mipmap.ic_launcher).into(viewHolder.imageView);
 
         return convertView;

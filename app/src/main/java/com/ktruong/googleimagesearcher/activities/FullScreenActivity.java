@@ -1,4 +1,4 @@
-package com.ktruong.googleimagesearcher;
+package com.ktruong.googleimagesearcher.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.ktruong.googleimagesearcher.R;
+import com.ktruong.googleimagesearcher.models.Photo;
 import com.squareup.picasso.Picasso;
 
 
