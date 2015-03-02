@@ -20,6 +20,7 @@ import com.ktruong.googleimagesearcher.adapter.PhotoSearchAdapter;
 import com.ktruong.googleimagesearcher.R;
 import com.ktruong.googleimagesearcher.listener.EndlessScrollListener;
 import com.ktruong.googleimagesearcher.models.Photo;
+import com.ktruong.googleimagesearcher.models.SearchPreference;
 import com.ktruong.googleimagesearcher.models.User;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -38,11 +39,12 @@ public class RequestActivity extends ActionBarActivity  {
     private List<Photo> photos;
 
     public static final int FORM_REQUEST_CODE = 20;
-    private User user;
+//    private User user;
     private PhotoSearchAdapter photoSearchAdapter;
     private SearchView searchView;
-    private String searchQuery;
+    private SearchQuery searchQuery;
     private GooglePhotoSearch googlePhotoSearch;
+    private SearchPreference searchPreference;
 
     /**
      *      * never create object outside of onCreate
@@ -79,20 +81,6 @@ public class RequestActivity extends ActionBarActivity  {
             }
         });
 
-//        resultView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if(!hasFocus){
-//                    hideKeyboard();
-//                }
-//            }
-//
-//            private void hideKeyboard() {
-//                InputMethodManager imm = (InputMethodManager)RequestActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(resultView.getWindowToken(), 0);
-//            }
-//        });
 
         resultView.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -103,10 +91,8 @@ public class RequestActivity extends ActionBarActivity  {
                 // or customLoadMoreDataFromApi(totalItemsCount);
             }
         });
-       
-        
-        
-        user = new User();
+
+        searchPreference = new SearchPreference();
     }
 
     /**
@@ -125,23 +111,27 @@ public class RequestActivity extends ActionBarActivity  {
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
                 photos.clear();
-                searchQuery = query;
+                searchQuery = new SearchQuery(query,0);
                 Log.i("INFO", "search query " + query);
-                googlePhotoSearch.search(new SearchQuery(query,0), photoSearchAdapter);
+                googlePhotoSearch.search(searchQuery, photoSearchAdapter, searchPreference, RequestActivity.this);
 
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                Log.i("INFO", "text change " + newText);
                 return false;
             }
         });
-        
+
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -149,14 +139,14 @@ public class RequestActivity extends ActionBarActivity  {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.miRequest) {
+        if (id == R.id.search_settings) {
             // INTENTS
             // 1. construct the intent
             // 2. pass the bundle (query string)
             // 3. execute the intent
 //            getIntent().getSerializableExtra()
             Intent intent = new Intent(this, FormActivity.class);
-            intent.putExtra("user", user);
+            intent.putExtra("searchPreference", searchPreference);
             
 //            startActivity(intent); // fire and forget
             startActivityForResult(intent, FORM_REQUEST_CODE); // fire expect result back
@@ -180,24 +170,19 @@ public class RequestActivity extends ActionBarActivity  {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == FORM_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                User userResponse = (User)data.getSerializableExtra("user");
-                user.setAge(userResponse.getAge());
-                int age = userResponse.getAge();
-                if(age > 21 ) {
-                    Toast.makeText(this, "Click " + age, Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(this, "Blah " + age, Toast.LENGTH_SHORT).show();
-                }
+                searchPreference = (SearchPreference)data.getSerializableExtra("searchPreference");
+
+                Log.i(this.getClass().getCanonicalName(), searchPreference.toString());
             }
         }
     }
 
     // Append more data into the adapter
-    public void customLoadMoreDataFromApi(int offset, String query) {
+    public void customLoadMoreDataFromApi(int offset, SearchQuery searchQuery) {
         // This method probably sends out a network request and appends new data items to your adapter.
         // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
         // Deserialize API response and then construct new objects to append to the adapter
         Log.i("INFO", "offset " + offset);
-        googlePhotoSearch.search(new SearchQuery(query, offset), photoSearchAdapter);
+        googlePhotoSearch.search(new SearchQuery(searchQuery.getQuery(), offset), photoSearchAdapter, searchPreference, this);
     }
 }

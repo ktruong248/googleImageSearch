@@ -9,4 +9,9 @@
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item android:id="@+id/search_settings"
+        android:title="@string/search_settings"
+        android:icon="@android:drawable/btn_plus"
+        android:orderInCategory="100" app:showAsAction="always" />
 </menu>

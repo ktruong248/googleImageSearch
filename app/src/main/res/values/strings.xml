@@ -2,7 +2,8 @@
     <string name="app_name">Google Image Searcher</string>
     <string name="search">Search</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="search_settings">Settings</string>
+    <string name="action_settings">Action Settings</string>
     <string name="title_activity_form_activityy">FormActivity</string>
     <string name="default_search_text">Enter image search</string>
     <string name="image_desc">image thumbnail</string>
@@ -10,4 +11,13 @@
     <string name="title_activity_full_screen">FullScreenActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="adv_search_title">Advanced search options</string>
+    <string name="image_size_title">Image Size</string>
+    <string name="color_filter_title">Color Filter</string>
+    <string name="image_type_title">Image Type</string>
+    <string name="site_filter_title">Site Filter</string>
+    <string name="save_title">Save</string>
+    <string name="default_site_filter_text">yahoo.com</string>
+    <string name="no_network">This app require networks</string>
+    <string name="no_search_result">No Result Found</string>
 </resources>

@@ -1,0 +1,52 @@
+<resources>
+    <!-- icon|small|medium|large|xlarge|xxlarge -->
+    <string-array name="image_size_arrays">
+        <item>any</item>
+        <item>icon</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+        <item>xlarge</item>
+        <item>xxlarge</item>
+    </string-array>
+
+    <!--imgcolor=black
+imgcolor=blue
+imgcolor=brown
+imgcolor=gray
+imgcolor=green
+imgcolor=orange
+imgcolor=pink
+imgcolor=purple
+imgcolor=red
+imgcolor=teal
+imgcolor=white
+imgcolor=yellow-->
+    <string-array name="color_filter_arrays">
+        <item>any</item>
+        <item>blue</item>
+        <item>brown</item>
+        <item>gray</item>
+        <item>green</item>
+        <item>orange</item>
+        <item>pink</item>
+        <item>purple</item>
+        <item>red</item>
+        <item>teal</item>
+        <item>white</item>
+        <item>yellow</item>
+    </string-array>
+    
+    <!--imgtype=face restricts results to images of faces.
+imgtype=photo restricts results to photographic images.
+imgtype=clipart restricts results to clipart images.
+imgtype=lineart restricts results to line drawing images.-->
+    <string-array name="image_type_arrays">
+        <item>any</item>
+        <item>face</item>
+        <item>photo</item>
+        <item>clipart</item>
+        <item>lineart</item>
+    </string-array>
+    
+</resources>
