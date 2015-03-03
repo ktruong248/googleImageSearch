@@ -20,6 +20,7 @@ Completed user stories:
  * [x] Advanced: Use the ActionBar SearchView or custom layout as the query box instead of an EditText
  * [x] Advanced: Use the StaggeredGridView to display improve the grid of image results
  * [x] Advanced: User can share an image to their friends or email it to themselves
+ * [x] Advanced: User can zoom or pan images displayed in full-screen detail view. using https://github.com/MikeOrtiz/TouchImageView
 
 Notes:
 
