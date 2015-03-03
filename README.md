@@ -19,6 +19,7 @@ Completed user stories:
  * [x] Advanced: Display error message when detected failure when failed to query google api using Toast.makeText
  * [x] Advanced: Use the ActionBar SearchView or custom layout as the query box instead of an EditText
  * [x] Advanced: Use the StaggeredGridView to display improve the grid of image results
+ * [x] Advanced: User can share an image to their friends or email it to themselves
 
 Notes:
 
